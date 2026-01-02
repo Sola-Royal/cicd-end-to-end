@@ -13,7 +13,7 @@ pipeline {
                 script{
                     sh '''
                     echo 'Buid Docker Image'
-                    docker build -t solaroyal/cicd-e2e:10:${BUILD_NUMBER} .
+                    sh "docker build -t solaroyal/cicd-e2e:${env.BUILD_NUMBER} ."
                     '''
                 }
             }
@@ -25,7 +25,7 @@ pipeline {
             // This logs in using the credentials you just created
             withCredentials([usernamePassword(credentialsId: 'docker-hub-login', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
                 sh "echo $PASS | docker login -u $USER --password-stdin"
-                sh "docker push solaroyal/cicd-e2e:10"
+                sh "docker push solaroyal/cicd-e2e:${env.BUILD_NUMBER}"
             }
         }
     }
