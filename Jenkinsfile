@@ -27,16 +27,17 @@ pipeline {
             }
         }
 
-        stage('Push the artifacts'){
-           steps{
-                script{
-                    sh '''
-                    echo 'Push to Repo'
-                    docker push solaroyal/cicd-e2e:${BUILD_NUMBER}
-                    '''
-                }
+        stage('Push the artifacts') {
+    steps {
+        script {
+            // This logs in using the credentials you just created
+            withCredentials([usernamePassword(credentialsId: 'docker-hub-login', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
+                sh "echo $PASS | docker login -u $USER --password-stdin"
+                sh "docker push solaroyal/cicd-e2e:7"
             }
         }
+    }
+}
         
         stage('Checkout K8S manifest SCM'){
             steps {
