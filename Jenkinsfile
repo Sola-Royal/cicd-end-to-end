@@ -45,7 +45,8 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: 'github-login', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
                         sh '''
                         cat deploy.yaml
-                        sed -i 's/32/10/g' deploy.yaml
+                        // This command finds "image: <anything>" and replaces it with your specific image and build number
+sh "sed -i 's|image: .*|image: solaroyal/cicd-e2e:${env.BUILD_NUMBER}|' deploy.yaml"
                         cat deploy.yaml
                         git add deploy.yaml
                         git commit -m 'Updated the deploy yaml | Jenkins Pipeline'
