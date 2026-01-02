@@ -13,7 +13,7 @@ pipeline {
                 script{
                     sh '''
                     echo 'Buid Docker Image'
-                    docker build -t solaroyal/cicd-e2e:${BUILD_NUMBER} .
+                    docker build -t solaroyal/cicd-e2e:10:${BUILD_NUMBER} .
                     '''
                 }
             }
@@ -25,7 +25,7 @@ pipeline {
             // This logs in using the credentials you just created
             withCredentials([usernamePassword(credentialsId: 'docker-hub-login', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
                 sh "echo $PASS | docker login -u $USER --password-stdin"
-                sh "docker push solaroyal/cicd-e2e:7"
+                sh "docker push solaroyal/cicd-e2e:10"
             }
         }
     }
@@ -45,7 +45,7 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: 'github-login', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
                         sh '''
                         cat deploy.yaml
-                        sed -i '' "s/32/${BUILD_NUMBER}/g" deploy.yaml
+                        sed -i 's/32/10/g' deploy.yaml
                         cat deploy.yaml
                         git add deploy.yaml
                         git commit -m 'Updated the deploy yaml | Jenkins Pipeline'
