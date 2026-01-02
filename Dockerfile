@@ -1,4 +1,6 @@
-FROM python:3
+# Change 'python:3' to 'python:3.10' to ensure compatibility with Django 3.2
+FROM python:3.10
+
 RUN pip install django==3.2
 
 COPY . .
@@ -6,5 +8,3 @@ COPY . .
 RUN python manage.py migrate
 EXPOSE 8000
 CMD ["python","manage.py","runserver","0.0.0.0:8000"]
-
-
